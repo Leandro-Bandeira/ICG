@@ -15,19 +15,28 @@ void MyGlDraw(void)
     //*************************************************************************
     // Chame aqui as funções do mygl.h
     //*************************************************************************
+  
+  /* altere os valores das posições para desenhar a reta */ 
+  int x1 = 256;
+  int y1 = 256;
+  int x2 = 0;
+  int y2 = 0;
+ 
   int *rgbGreen = (int*)malloc(3 * sizeof(int));
   rgbGreen[0] = 0;
   rgbGreen[1] = 255;
   rgbGreen[2] = 0;
   rgbGreen[3] = 255;
-   
-  t_Pixel pixelInit(10, 20, rgbGreen);
+  
 
-
-  t_Pixel pixelEnd(511,511, rgbGreen);
-
+  t_Pixel pixelInit(x1, y1, rgbGreen);
+  t_Pixel pixelEnd(x2,y2, rgbGreen);
   DrawLine(&pixelInit, &pixelEnd);
-
+  
+  t_Pixel pixel_i(256, 256, rgbGreen);
+  t_Pixel pixel_m(256, 512, rgbGreen);
+  t_Pixel pixel_f(512, 256, rgbGreen);
+  DrawTriangle(&pixel_i, &pixel_m, &pixel_f);
 }
 
 
@@ -83,4 +92,15 @@ void DrawLine(t_Pixel* pixel_i, t_Pixel* pixel_f)
     }
   }
   
+}
+
+/* Função responsável por desenhar um triangulo na tela 
+ * para desenhar um triangulo na tela, basta chamar a função de drawLine
+ * do primeiro pixel ao segundo pixel, do segundo ao terceiro e por fim do terceiro ao primeiro */ 
+void DrawTriangle(t_Pixel* pixeli, t_Pixel* pixelm, t_Pixel* pixelf){
+  
+  DrawLine(pixeli, pixelm);
+  DrawLine(pixelm, pixelf);
+  DrawLine(pixeli, pixelf);
+
 }
