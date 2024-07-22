@@ -32,12 +32,21 @@ void MyGlDraw(void)
   /* Desenhando inicialmente do centro para a direita */ 
   t_Pixel pixelInit(256, 256, rgbGreen);
   t_Pixel pixelEnd(511,256, rgbGreen);
-  DrawLine(&pixelInit, &pixelEnd);
-
+  //DrawLine(&pixelInit, &pixelEnd);
+  
+  /*
+  for(int x = 0; x < 511; x+=8){
+    for(int y = 0; y < 511; y+=8){
+      t_Pixel pixel(x,y, rgbGreen);
+      PutPixel(&pixel);
+    }
+  }
+  
+  
   int x1 =  0;
   int y1 = 0;
 
-  /* o For abaixo é responsável por desenhar as linhas por todo o octeto */
+  /* o For abaixo é responsável por desenhar as linhas por todo o octeto
   for(int i = 1; i < 8; i++){
     if (i == 1){
       x1 = 511;
@@ -63,10 +72,12 @@ void MyGlDraw(void)
     t_Pixel pixelEnd(x1,y1, rgbGreen);
     DrawLine(&pixelInit, &pixelEnd);
   }
+  */
   t_Pixel pixel_i(100, 100, rgbBlue);
   t_Pixel pixel_m(100, 300, rgbBlue);
   t_Pixel pixel_f(300, 350, rgbBlue);
   DrawTriangle(&pixel_i, &pixel_m, &pixel_f);
+  
 }
 
 
