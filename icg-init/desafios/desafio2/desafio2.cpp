@@ -209,7 +209,7 @@ void create_menu(){
   GLint submenu_id = glutCreateMenu(handle_menu);
   glutAddMenuEntry("Ponto", 0);
   glutAddMenuEntry("Linha", 1);
-  glutAddMenuEntry("Retângulo", 2);
+  glutAddMenuEntry("Retangulo", 2);
   glutAddMenuEntry("Circulo", 3);
   
   /* Criação do menu principal, onde teremos um outro submenu e uma entrada para limpar */ 
