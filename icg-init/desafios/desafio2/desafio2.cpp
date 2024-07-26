@@ -1,3 +1,4 @@
+#include <GL/freeglut_std.h>
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include <cstdio>
@@ -7,14 +8,17 @@
 GLint WINDOW_WIDTH = 500;
 GLint WINDOW_HEIGHT = 500;
 
-
-
+// Cores do menu
+GLfloat r,g,b;
+int mode = 0; /* Modo de desenho, 0 para ponto, 1 para linha, 2 para retangulo e 3 circulo */ 
 ConfigData::Structs line;
 
 void initDraw(){
     glColor3f(0.0f, 0.0f, 0.0f);
 
 }
+
+/* Altera a cor do ponto */
 void change_color_points(int mode){
     /* 0 -> Red, 1-> Green, 2-> Blue*/
     if(mode == 0){
@@ -166,19 +170,84 @@ void eventos_teclado(GLubyte key, GLint x, GLint y){
 }
 
 
+/* Funçao responsável por gerenciar o sub_menu de desenho */
+void handle_menu(GLint menu_index){
+   
+  switch(menu_index){
+    case 0:
+      mode = 0;
+      break;
+    case 1:
+      mode = 1;
+      break;
+    case 2:
+      mode = 2;
+      break;
+    case 3:
+      mode = 3;
+      break;
+  }
 
+  glFlush();
+}
+
+
+/* Gerenciamento do menu prinicipal, caso a opção seja de limpar */ 
+void menu_principal(GLint op)
+{
+  if(op == 1){
+    glClearColor(255.0f, 255.0f, 255.0f, 255.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+  }
+
+  glFlush();
+}
+void create_menu(){
+  
+  /* Criação do sub_menu para desenhar */ 
+  GLint submenu_id = glutCreateMenu(handle_menu);
+  glutAddMenuEntry("Ponto", 0);
+  glutAddMenuEntry("Linha", 1);
+  glutAddMenuEntry("Retângulo", 2);
+  glutAddMenuEntry("Circulo", 3);
+  
+  /* Criação do menu principal, onde teremos um outro submenu e uma entrada para limpar */ 
+  GLint menu_p = glutCreateMenu(menu_principal);
+  glutAddSubMenu("Desenhar", submenu_id);
+  glutAddMenuEntry("Limpar", 1);
+  
+  glutAttachMenu(GLUT_RIGHT_BUTTON);
+
+}
+
+/* Função responsável por detectar o click no mouse
+ * e após dois clicks irá desenhar uma linha, retangulo ou circulo, dependendo do modo */
 void eventos_mouse(GLint buttom, GLint action, GLint x, GLint y){
     if(buttom == GLUT_LEFT_BUTTON && action == GLUT_DOWN){
-        draw_points(x, y);
+        
+        if(mode == 0){
+          draw_points(x, y);
+        }
         line.incCounterLine();
         if(line.counter_click_line == 1){
             line.set_points_line(x, y, 0);
         }else if(line.counter_click_line == 2){
             line.set_points_line(x, y, 1);
-            draw_circle(line);
+            if(mode == 1){
+              draw_line(line);
+            }else if(mode == 2){
+              draw_ret(line);
+            }else if (mode == 3){
+
+              draw_circle(line);
+            }
             line.resetCounterLine();
         }
         
+    }
+    if(buttom == GLUT_RIGHT_BUTTON && action == GLUT_DOWN){
+      create_menu();
     }
     
     
@@ -186,10 +255,13 @@ void eventos_mouse(GLint buttom, GLint action, GLint x, GLint y){
 }
 
 
-
+/* Desenha pontos enquanto o mouse está andando na tela pressionado */
 void eventos_mouse_2(GLint x, GLint y){
     draw_points(x,y);  
 }
+
+
+
 int main(int argc, char** argv){
     
     initWindow(&argc, argv);
